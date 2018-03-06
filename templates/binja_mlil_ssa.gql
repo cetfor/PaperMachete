@@ -1,0 +1,289 @@
+define 
+
+## ENTITIES #####################################
+function sub entity
+	plays in-function
+	has func-name
+	has asm-address
+	has stack;
+
+basic-block sub entity
+	plays from-basic-block 
+	plays to-basic-block
+	plays in-basic-block 
+	plays contains-basic-block
+	has bb-name
+	has bb-start
+	has bb-end;
+
+instruction sub entity
+	plays from-node
+	plays to-node
+	plays in-instruction
+	plays contains-instruction
+	has name
+	has il-index
+	has asm-address
+	has ins-text
+	has operation-type
+	has in-bb;
+
+operation sub entity
+	plays from-node
+	plays to-node
+	plays in-operation
+	plays contains-operation
+	has name
+	has parent-hash
+	has edge-label;
+
+constant sub entity
+	plays from-node
+	plays to-node
+	has name
+	has parent-hash
+	has constant-value
+	has edge-label;
+
+variable sub entity
+	plays from-node
+	plays to-node
+	has name
+	has parent-hash
+	has var
+	has edge-label
+	has var-type
+	has var-size
+	has var-func;
+
+variable-ssa sub entity
+	plays from-node
+	plays to-node
+	plays trace
+	has name
+	has parent-hash
+	has var
+	has version
+	has edge-label
+	has var-type
+	has var-size
+	has var-func;
+
+list sub entity
+	plays from-node
+	plays to-node
+	has name
+	has parent-hash
+	has list-size
+	has edge-label;
+
+
+## SUB ENTITIES #################################
+#### OPERATIONS #################################
+MLIL_NOP sub operation;
+MLIL_SET_VAR sub operation;
+MLIL_SET_VAR_FIELD sub operation;
+MLIL_SET_VAR_SPLIT sub operation;
+MLIL_LOAD sub operation;
+MLIL_STORE sub operation;
+MLIL_VAR sub operation;
+MLIL_VAR_FIELD sub operation;
+MLIL_ADDRESS_OF sub operation;
+MLIL_ADDRESS_OF_FIELD sub operation;
+MLIL_CONST sub operation;
+MLIL_CONST_PTR sub operation;
+MLIL_ADD sub operation;
+MLIL_ADC sub operation;
+MLIL_SUB sub operation;
+MLIL_SBB sub operation;
+MLIL_AND sub operation;
+MLIL_OR sub operation;
+MLIL_XOR sub operation;
+MLIL_LSL sub operation;
+MLIL_LSR sub operation;
+MLIL_ASR sub operation;
+MLIL_ROL sub operation;
+MLIL_RLC sub operation;
+MLIL_ROR sub operation;
+MLIL_RRC sub operation;
+MLIL_MUL sub operation;
+MLIL_MULU_DP sub operation;
+MLIL_MULS_DP sub operation;
+MLIL_DIVU sub operation;
+MLIL_DIVU_DP sub operation;
+MLIL_DIVS sub operation;
+MLIL_DIVS_DP sub operation;
+MLIL_MODU sub operation;
+MLIL_MODU_DP sub operation;
+MLIL_MODS sub operation;
+MLIL_MODS_DP sub operation;
+MLIL_NEG sub operation;
+MLIL_NOT sub operation;
+MLIL_SX sub operation;
+MLIL_ZX sub operation;
+MLIL_LOW_PART sub operation;
+MLIL_JUMP sub operation;
+MLIL_JUMP_TO sub operation;
+MLIL_CALL sub operation;
+MLIL_CALL_UNTYPED sub operation;
+MLIL_CALL_OUTPUT sub operation;
+MLIL_CALL_PARAM sub operation;
+MLIL_RET sub operation;
+MLIL_NORET sub operation;
+MLIL_IF sub operation;
+MLIL_GOTO sub operation;
+MLIL_CMP_E sub operation;
+MLIL_CMP_NE sub operation;
+MLIL_CMP_SLT sub operation;
+MLIL_CMP_ULT sub operation;
+MLIL_CMP_SLE sub operation;
+MLIL_CMP_ULE sub operation;
+MLIL_CMP_SGE sub operation;
+MLIL_CMP_UGE sub operation;
+MLIL_CMP_SGT sub operation;
+MLIL_CMP_UGT sub operation;
+MLIL_TEST_BIT sub operation;
+MLIL_BOOL_TO_INT sub operation;
+MLIL_ADD_OVERFLOW sub operation;
+MLIL_SYSCALL sub operation;
+MLIL_SYSCALL_UNTYPED sub operation;
+MLIL_BP sub operation;
+MLIL_TRAP sub operation;
+MLIL_UNDEF sub operation;
+MLIL_UNIMPL sub operation;
+MLIL_UNIMPL_MEM sub operation;
+MLIL_IMPORT sub operation;
+MLIL_SET_VAR_SSA sub operation;
+MLIL_SET_VAR_SSA_FIELD sub operation;
+MLIL_SET_VAR_SPLIT_SSA sub operation;
+MLIL_SET_VAR_ALIASED sub operation;
+MLIL_SET_VAR_ALIASED_FIELD sub operation;
+MLIL_VAR_SSA sub operation;
+MLIL_VAR_SSA_FIELD sub operation;
+MLIL_VAR_ALIASED sub operation;
+MLIL_VAR_ALIASED_FIELD sub operation;
+MLIL_CALL_SSA sub operation;
+MLIL_CALL_UNTYPED_SSA sub operation;
+MLIL_SYSCALL_SSA sub operation;
+MLIL_SYSCALL_UNTYPED_SSA sub operation;
+MLIL_CALL_OUTPUT_SSA sub operation;
+MLIL_CALL_PARAM_SSA sub operation;
+MLIL_LOAD_SSA sub operation;
+MLIL_STORE_SSA sub operation;
+MLIL_VAR_PHI sub operation;
+MLIL_MEM_PHI sub operation;
+
+
+## Attribute (has) ##############################
+stack			sub attribute datatype string;
+operation-type 	sub attribute datatype string;
+ins-text		sub attribute datatype string;
+func-name		sub attribute datatype string;
+bb-name			sub attribute datatype string;
+name			sub attribute datatype string;
+in-bb			sub attribute datatype string;
+asm-address 	sub attribute datatype string;
+edge-label 		sub attribute datatype string;
+constant-value 	sub attribute datatype string;
+parent-hash 	sub attribute datatype string;
+var 			sub attribute datatype string;
+var-type 		sub attribute datatype string;
+var-func 		sub attribute datatype string;
+var-size		sub attribute datatype long;
+bb-start		sub attribute datatype long;
+bb-end			sub attribute datatype long;
+il-index 		sub attribute datatype long;
+list-size 		sub attribute datatype long;
+int 			sub attribute datatype long;
+version 		sub attribute datatype long;
+size			sub attribute datatype long;
+if-true 		sub attribute datatype long;
+if-false 		sub attribute datatype long;
+
+
+## ROLES (plays) ################################
+in-function 			sub role;
+from-basic-block 		sub role;
+to-basic-block			sub role;
+in-basic-block 			sub role;
+contains-basic-block 	sub role;
+in-instruction 			sub role;
+contains-instruction 	sub role;
+in-operation 			sub role;
+contains-operation 		sub role;
+from-node 				sub role;
+to-node					sub role;
+trace					sub role;
+
+## RELATIONSHIP ####################################
+has-basic-block sub relationship
+	relates in-function
+	relates contains-basic-block;
+
+basic-block-edge sub relationship
+	relates from-basic-block
+	relates to-basic-block;
+
+has-instruction sub relationship
+    relates contains-instruction
+    relates in-basic-block;
+
+instruction-has-operation sub relationship
+	relates contains-operation
+	relates in-instruction;
+
+operation-has-operation sub relationship
+	relates contains-operation
+	relates in-operation;
+
+node-link sub relationship
+	relates from-node
+	relates to-node;
+
+trace-link sub relationship
+	relates trace;
+
+trace-instruction sub relationship
+	relates trace;
+
+trace-full sub relationship
+	relates trace;
+
+## INFERRENCE RULES #############################
+share-var sub rule
+when {
+	$v1 isa variable-ssa, has var $var;
+	$v2 isa variable-ssa, has var $var;
+	$v1 != $v2;
+},
+then {
+	(trace:$v1, trace:$v2) isa trace-link;
+};
+
+share-instruction sub rule
+when {
+	$v1 isa variable-ssa;
+	$v2 isa MLIL_VAR_SSA;
+	(to-node:$v1, from-node:$v2);
+	$v4 isa variable-ssa;
+	$v3 isa MLIL_VAR_SSA;
+	(to-node:$v4, from-node:$v3);
+	(from-node:$inst, to-node:$v2);
+	(from-node:$inst, to-node:$v3);
+	$inst isa instruction;
+	$v1 != $v2;$v2 != $v3;$v3 != $v4;$v1 != $v4;$v2 != $v4;$v1 != $v3;
+},
+then {
+	(trace:$v1, trace:$v4) isa trace-instruction;
+};
+
+trace-goal sub rule
+when {
+	(trace:$v1,trace:$v2) isa trace-link;
+	(trace:$v2,trace:$v3) isa trace-instruction;
+	$v1 != $v2;$v2 != $v3;$v1 != $v3;
+},
+then {
+	(trace:$v1, trace:$v3) isa trace-full;
+};   
+ 
