@@ -25,7 +25,7 @@ The ability to write our own domain-specific ontologies lets us quickly experime
 While the end game for PM is to eliminate the need for human-written queries, the fact is we're starting from square one. Which means hand-jamming a lot queries to model the patterns human vulnerability researchers look for when bug hunting.
 
 ## Dependencies
-Paper Machete requires [BinaryNinja v1.1](https://binary.ninja), [Grakn v1.0.0](https://github.com/graknlabs/grakn/releases/tag/v1.0.0), the [Grakn Python Driver](http://github.com/graknlabs/grakn-python), and the [Java JRE](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+Paper Machete requires [BinaryNinja v1.1](https://binary.ninja), [Grakn v1.4.2](https://github.com/graknlabs/grakn/releases/tag/v1.4.2), the [Grakn Python Driver](http://github.com/graknlabs/grakn-python), and the [Java JRE](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
 
 
 ## Query Scripts
