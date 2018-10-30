@@ -1,8 +1,7 @@
 import sys
 import subprocess
-from os import listdir
+import os
 from os.path import abspath, isdir, isfile, join, splitext
-from ConfigParser import RawConfigParser
 from mimetypes import guess_type
 from urllib2 import urlopen
 from ast import literal_eval
@@ -11,9 +10,6 @@ import pmanalyze
 ENTER = '\nPress ENTER to continue'
 MACHETE = abspath('.')
 query_path = join(MACHETE, "queries")
-configParser = RawConfigParser()
-configParser.read('config')
-GRAKN = configParser.get('PATHS', 'GRAKN') 
 ANALYSIS = join(MACHETE, "analysis")
 
 MAX_ACTIVE = 25     # migration knob: max number of migration workers running at once
@@ -39,7 +35,7 @@ TEMPLATE_DESC = [
 def print_banner(title=""):
     subprocess.call("clear")
     print("""
- ____                        __  __            _          _           
+ ____                        __  __            _          _
 |  _ \ __ _ _ __  ___ _ __  |  \/  | __ _  ___| |__   ___| |_ ___    ________
 | |_) / _` | '_ \/ _ \ '__| | |\/| |/ _` |/ __| '_ \ / _ \ __/ _ \  /_______/
 |  __/ (_| | |_)|  __/ |    | |  | | (_| | (__| | | |  __/ ||  __/  \_______\\
@@ -65,7 +61,7 @@ def run_script(query_path, query, keyspace):
 def run_queries(query, keyspace):
     if query == 'all_queries':
         print("Running all CWE queries against the '{}' keyspace...".format(keyspace))
-        queries = [f for f in listdir(query_path) if isfile(join(query_path, f))]
+        queries = [f for f in os.listdir(query_path) if isfile(join(query_path, f))]
         for query in queries:
             if ".py" not in query: continue
             if run_script(query_path, query, keyspace): return
@@ -81,7 +77,7 @@ def run_queries(query, keyspace):
 
 
 def get_file_selection(types):
-    file_list = listdir(ANALYSIS)
+    file_list = os.listdir(ANALYSIS)
     filtered = []
     for file in file_list:
         if types == "json" and guess_type(join(ANALYSIS, file))[0] == "application/json":
@@ -93,7 +89,7 @@ def get_file_selection(types):
                 filtered.append(file)
         else:
             pass # not json or executable binary
-        
+
     # print file choices
     if len(filtered) == 0:
         if types == "json":
@@ -109,14 +105,14 @@ def get_file_selection(types):
     index = raw_input("\nSelect a file number to analyze ([q]uit): ").lower()
     if index == "q" or index == "quit":
         return "quit"
-    
+
     try:
         index = int(index)
         if index in range(0, len(filtered)):
             return filtered[int(index)]
     except ValueError:
         pass
-    
+
     if index != "":
         print("\nThat is not a valid file selection. Try again.")
         raw_input(ENTER)
@@ -135,17 +131,14 @@ def main():
     while menu:
         print_banner()
 
-        # check directories	
-        if not isdir(GRAKN):
-            if GRAKN == '':
-                print("Please set the path to your Grakn installation in the config file.\n")
-                print("Open the file called 'config' in your paper machete folder, and set")
-                print("the variable 'GRAKN' to the full file path of your Grakn installation.")
-            else:
-                print("Grakn directory not found\n")
-                print("Please ensure grakn is located in {}".format(GRAKN))
+        # check directories
+        try:
+            subprocess.call(['grakn', 'version'], stdout=open(os.devnull, 'wb'))
+            subprocess.call(['graql', 'version'], stdout=open(os.devnull, 'wb'))
+        except OSError:
+            print("Please ensure grakn and graql are in your PATH")
             sys.exit()
-        
+
         if not isdir(MACHETE):
             print("Paper Machete directory not found")
             print("Please ensure Paper Machete is located in {}".format(MACHETE))
@@ -167,7 +160,7 @@ def main():
 
         # analyze a binary file
         if menu_option == 1:
-            
+
             # display supported binary files in ./analysis
             binary = False
             while binary == False:
@@ -189,7 +182,7 @@ def main():
                     print functions
                     pmanalyze.main(join(ANALYSIS, binary), functions)
             raw_input(ENTER)
-            
+
         # migrate a json file into Grakn
         elif menu_option == 2:
 
@@ -202,12 +195,12 @@ def main():
                     break
             if json == "quit":
                 continue
-            
+
             # check to see if the keyspace already exists for this file
             try:
                 keyspace = json.lower().replace('.json', '')
                 keyspaces = literal_eval(urlopen('http://127.0.0.1:4567/kb').read())
-                
+
                 inc = 1
                 finding_name = True
                 while finding_name:
@@ -218,11 +211,11 @@ def main():
                         keyspace = "{}_{}".format(keyspace, inc) # add a _# suffix and try again
             except:
                 print("Unable to query keyspace names. Is Grakn running?\nContinuing assuming keyspace '{}' is OK to use.".format(keyspace))
-                
+
             try:
                 # insert the ontology
                 print("Inserting ontology into the '{}' keyspace...".format(keyspace))
-                subprocess.call([join(GRAKN,"graql"),"console", "-f", join(MACHETE, "templates", "binja_mlil_ssa.gql"), "-k", keyspace])
+                subprocess.call(["graql","console", "-f", join(MACHETE, "templates", "binja_mlil_ssa.gql"), "-k", keyspace])
 
 
                 # migrate data into Grakn
@@ -231,7 +224,7 @@ def main():
                 # loop over all 7 templates
                 for num in range(1,8):
                     print(">> Migration step {} of 7: {}".format(num, TEMPLATE_DESC[num]))
-                    subprocess.call([join(GRAKN, "graql"), "migrate", "json", "--template", join(MACHETE, "templates", "binja_mlil_ssa_{}.tpl".format(num)), "--input", join(ANALYSIS, json), "--keyspace", keyspace])
+                    subprocess.call(["graql", "migrate", "json", "--template", join(MACHETE, "templates", "binja_mlil_ssa_{}.tpl".format(num)), "--input", join(ANALYSIS, json), "--keyspace", keyspace])
 
                 print("Data successfully migrated into Grakn. You can now run CWE query scripts against '{}' to check for vulnerabilities".format(keyspace))
                 raw_input(ENTER)
@@ -267,11 +260,11 @@ def main():
         elif menu_option == 4:
             print("Restarting Grakn. Press \"Y\" when prompted.\nWait until you see the Grakn banner before continuing!")
             raw_input(ENTER)
-            
-            subprocess.call([join(GRAKN, "grakn"), "server", "stop"])
-            subprocess.call([join(GRAKN, "grakn"), "server", "clean"])
-            subprocess.call([join(GRAKN, "grakn"), "server", "start"])
-            
+
+            subprocess.call(["grakn", "server", "stop"])
+            subprocess.call(["grakn", "server", "clean"])
+            subprocess.call(["grakn", "server", "start"])
+
         # quit
         elif menu_option == 5:
             menu = False
@@ -279,6 +272,6 @@ def main():
         else:
             print("Invalid option!\n")
             raw_input(ENTER)
-        
+
 if __name__ == "__main__":
     main()
