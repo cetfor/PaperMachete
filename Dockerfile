@@ -21,12 +21,11 @@ COPY binaryninja/license.txt /root/.binaryninja/license.dat
 RUN  pip install pexpect && python /tmp/update_to_latest.py && rm /tmp/version_switcher.py && rm /tmp/update_to_latest.py
 
 # Grakn
-COPY requirements.txt /tmp/requirements.txt
 RUN  BROWSER_DOWNLOAD_URL=$(curl --silent https://api.github.com/repos/graknlabs/grakn/releases/latest | python -c "import sys; from json import loads as l; x = l(sys.stdin.read()); print(''.join(s['browser_download_url'] for s in x['assets']))"); \
      curl -fL $BROWSER_DOWNLOAD_URL -o /tmp/grakn.zip && \
      unzip /tmp/grakn.zip -d /opt/ && rm /tmp/grakn.zip && \
      ln -s /opt/grakn*/grakn /usr/local/bin/ && ln -s /opt/grakn*/graql /usr/local/bin/ && \
-     pip3 install -r /tmp/requirements.txt && rm /tmp/requirements.txt
+     pip3 install grakn
 
 # Useful stuff
 RUN  DEBIAN_FRONTEND=noninteractive apt install -y --fix-missing \
