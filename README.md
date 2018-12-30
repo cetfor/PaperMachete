@@ -29,7 +29,7 @@ The ability to write our own domain-specific ontologies lets us quickly experime
 While the end game for PM is to eliminate the need for human-written queries, the fact is we're starting from square one. Which means hand-jamming a lot queries to model the patterns human vulnerability researchers look for when bug hunting.
 
 ## Usage
-PM provides a workflow for basic use. After installing and starting PM (see [Setup](https://github.com/cetfor/PaperMachete/wiki/Setup)), just follow the prompts:
+PM provides a workflow for basic use. After [installing and starting PM](https://github.com/cetfor/PaperMachete/wiki/Setup), just follow the prompts:
 ```
 [1] Analyze a targets/<target executable>
 [2] Migrate a targets/<analysis>.json
@@ -38,4 +38,4 @@ PM provides a workflow for basic use. After installing and starting PM (see [Set
 [5] Quit
 ```
 
-See [queries/]() for examples. As you can imagine, there is no "silver bullet" query that will find all manifestations of a specific vulnerability class. Because of this, we've included versions for each CWE query. As we add new methods of finding the same CWE, we'll add scripts with incremented the version numbers to differentiate.
+See [queries/](https://github.com/cetfor/PaperMachete/tree/master/queries) for examples. As you can imagine, there is no "silver bullet" query that will find all manifestations of a specific vulnerability class. Because of this, we've included versions for each CWE query. As we add new methods of finding the same CWE, we'll add scripts with incremented the version numbers to differentiate. We are also [tracking coverage of the DARPA CGC challenges](https://github.com/cetfor/PaperMachete/wiki/CGC-Coverage).
