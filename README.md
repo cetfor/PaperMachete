@@ -29,47 +29,13 @@ The ability to write our own domain-specific ontologies lets us quickly experime
 While the end game for PM is to eliminate the need for human-written queries, the fact is we're starting from square one. Which means hand-jamming a lot queries to model the patterns human vulnerability researchers look for when bug hunting.
 
 ## Usage
-First, read [Setup](https://github.com/cetfor/PaperMachete/wiki/Setup) to install prerequisites, start Grakn, and 
-
-Typical usage 
-
+PM provides a workflow for basic use. After installing and starting PM (see [Setup](https://github.com/cetfor/PaperMachete/wiki/Setup)), just follow the prompts:
 ```
-[1] Analyze a binary file
-[2] Migrate a JSON file into Grakn
-[3] Run all CWE queries
-[4] Clean and restart Grakn
+[1] Analyze a targets/<target executable>
+[2] Migrate a targets/<analysis>.json
+[3] Run queries/cwe_*
+[4] Grakn server stop, clean, and start
 [5] Quit
 ```
 
-## Query Scripts
-We've included some basic queries to get you started if you want to play around with PM. As you can imagine, there is no "silver bullet" query that will find all manifestations of a specific vulnerability class. Because of this, we've included versions for each CWE query. As we add new methods of finding the same CWE, we'll add scripts with incremented the version numbers to differentiate. 
-
-`cwe_120_v1.py` - Tests for use of unsafe 'gets()' function ([CWE-120](https://cwe.mitre.org/data/definitions/120.html))
-
-`cwe_121_v1.py` - Tests for buffer overflows ([CWE-121](https://cwe.mitre.org/data/definitions/121.html))
-
-`cwe_129_v1.py` - Tests for missing bounds checks ([CWE-129](https://cwe.mitre.org/data/definitions/129.html))
-
-`cwe_134_v1.py` - Tests for format string vulnerabilities ([CWE-134](https://cwe.mitre.org/data/definitions/134.html))
-
-`cwe_788_v1.py` - Tests for missing bounds check on array indexes ([CWE-788](https://cwe.mitre.org/data/definitions/788.html))
-
-## How Do I Use It?
-
-For basic use, run the `paper_machete.py` script and follow the prompts. For more advanced use, please [read the wiki](https://github.com/cetfor/PaperMachete/wiki).
-
-Typically you'll start with option `[1]` and work your way down to option `[3]`. If you run into any issues with Grakn use option `[4]` to reset Grakn to a clean state and try again.
-```
-... banner ...
-[1] Analyze a binary file
-[2] Migrate a JSON file into Grakn
-[3] Run all CWE queries
-[4] Clean and restart Grakn
-[5] Quit
-```
-
-Option `[1]` lists all executable files in the `/analysis` directory. So place any executables you want to analyze in `/analysis`. This option will run `pmanalyze.py` and generate a JSON file in the `/analysis` directory.
-
-Once you've analyzed files with `[1]` and produced resulting JSON files, they will appear as a choice in option `[2]`. Selecting a JSON file in option `[2]` will migrate the data into Grakn.
-
-Now that you have data in Grakn, you can use option `[3]`. This will kick off all scripts in `/queries` against the keyspace of your choice. If you write your own query patterns, just throw them in `/queries` and option `[3]` will run them too.
+See [queries/]() for examples. As you can imagine, there is no "silver bullet" query that will find all manifestations of a specific vulnerability class. Because of this, we've included versions for each CWE query. As we add new methods of finding the same CWE, we'll add scripts with incremented the version numbers to differentiate.
